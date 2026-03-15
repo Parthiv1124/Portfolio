@@ -99,8 +99,8 @@
        CUSTOM CURSOR
     ============================================ */
     .cursor-dot {
-      width: 240px;
-      height: 240px;
+      width: 50px;
+      height: 50px;
       background: var(--accent);
       border-radius: 50%;
       position: fixed;
@@ -110,17 +110,27 @@
       z-index: 99999;
       transform: translate(-50%, -50%);
       mix-blend-mode: difference;
-      transition: width 0.4s var(--ease-out-expo), height 0.4s var(--ease-out-expo), opacity 0.3s ease;
+      transition: width 0.35s var(--ease-out-expo),
+                  height 0.35s var(--ease-out-expo),
+                  opacity 0.3s ease;
+    }
+
+    /* Over text / alphanumeric content — expand */
+    .cursor-dot.on-text {
+      width: 240px;
+      height: 240px;
+      opacity: 0.85;
+    }
+
+    /* Over interactive elements (links, buttons) — medium */
+    .cursor-dot.on-interactive {
+      width: 120px;
+      height: 120px;
+      opacity: 0.6;
     }
 
     .cursor-ring {
       display: none;
-    }
-
-    .cursor-dot.hovering {
-      width: 80px;
-      height: 80px;
-      opacity: 0.3;
     }
 
 
@@ -2095,44 +2105,64 @@
       // =============================================
       function initCursor() {
         var dot = document.getElementById('cursorDot');
-        var ring = document.getElementById('cursorRing');
-        if (!dot || !ring) return;
+        if (!dot) return;
         if (window.matchMedia('(max-width: 900px)').matches) return;
 
         var mouseX = 0, mouseY = 0;
         var dotX = 0, dotY = 0;
-        var ringX = 0, ringY = 0;
+
+        // Tags whose content is considered alphanumeric/text
+        var TEXT_TAGS = new Set([
+          'P','H1','H2','H3','H4','H5','H6',
+          'SPAN','LI','TD','TH','BLOCKQUOTE',
+          'LABEL','FIGCAPTION','ARTICLE','STRONG',
+          'EM','B','I','CITE','Q','MARK','TIME',
+          'SMALL','SUB','SUP'
+        ]);
+
+        var INTERACTIVE_TAGS = new Set(['A','BUTTON','INPUT','SELECT','TEXTAREA']);
+
+        function getState(el) {
+          if (!el || el === document.body || el === document.documentElement) return 'default';
+          if (INTERACTIVE_TAGS.has(el.tagName)) return 'interactive';
+          if (TEXT_TAGS.has(el.tagName)) return 'text';
+          // Walk up to find a text/interactive ancestor
+          var node = el.parentElement;
+          var depth = 0;
+          while (node && depth < 5) {
+            if (INTERACTIVE_TAGS.has(node.tagName)) return 'interactive';
+            if (TEXT_TAGS.has(node.tagName)) return 'text';
+            node = node.parentElement;
+            depth++;
+          }
+          // Check if the element itself directly contains alphanumeric text nodes
+          for (var i = 0; i < el.childNodes.length; i++) {
+            var child = el.childNodes[i];
+            if (child.nodeType === 3 && /[a-zA-Z0-9]/.test(child.textContent)) return 'text';
+          }
+          return 'default';
+        }
 
         document.addEventListener('mousemove', function (e) {
           mouseX = e.clientX;
           mouseY = e.clientY;
+
+          var el = document.elementFromPoint(e.clientX, e.clientY);
+          var state = getState(el);
+
+          dot.classList.remove('on-text', 'on-interactive');
+          if (state === 'text')        dot.classList.add('on-text');
+          else if (state === 'interactive') dot.classList.add('on-interactive');
         });
 
         function animate() {
-          dotX += (mouseX - dotX) * 0.2;
-          dotY += (mouseY - dotY) * 0.2;
-          ringX += (mouseX - ringX) * 0.08;
-          ringY += (mouseY - ringY) * 0.08;
-
+          dotX += (mouseX - dotX) * 0.12;
+          dotY += (mouseY - dotY) * 0.12;
           dot.style.left = dotX + 'px';
-          dot.style.top = dotY + 'px';
-          ring.style.left = ringX + 'px';
-          ring.style.top = ringY + 'px';
-
+          dot.style.top  = dotY + 'px';
           requestAnimationFrame(animate);
         }
         animate();
-
-        document.querySelectorAll('[data-cursor-hover], a, button').forEach(function (el) {
-          el.addEventListener('mouseenter', function () {
-            dot.classList.add('hovering');
-            ring.classList.add('hovering');
-          });
-          el.addEventListener('mouseleave', function () {
-            dot.classList.remove('hovering');
-            ring.classList.remove('hovering');
-          });
-        });
       }
 
       // =============================================
