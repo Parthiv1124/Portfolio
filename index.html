@@ -99,8 +99,8 @@
        CUSTOM CURSOR
     ============================================ */
     .cursor-dot {
-      width: 60px;
-      height: 60px;
+      width: 240px;
+      height: 240px;
       background: var(--accent);
       border-radius: 50%;
       position: fixed;
@@ -114,17 +114,7 @@
     }
 
     .cursor-ring {
-      width: 60px;
-      height: 60px;
-      border: 1px solid rgba(194, 240, 76, 0.4);
-      border-radius: 50%;
-      position: fixed;
-      top: 0;
-      left: 0;
-      pointer-events: none;
-      z-index: 99998;
-      transform: translate(-50%, -50%);
-      transition: width 0.4s var(--ease-out-expo), height 0.4s var(--ease-out-expo), border-color 0.3s ease, opacity 0.3s ease;
+      display: none;
     }
 
     .cursor-dot.hovering {
@@ -133,11 +123,6 @@
       opacity: 0.3;
     }
 
-    .cursor-ring.hovering {
-      width: 100px;
-      height: 100px;
-      border-color: rgba(194, 240, 76, 0.6);
-    }
 
     /* ============================================
        LOADING SCREEN
@@ -1692,8 +1677,8 @@
         <h3 class="project-name">Hema Pharmaceuticals</h3>
         <p class="project-desc">Designed and developed the full company website — my first freelance client. Complete brand presence built from scratch, responsive and production-ready.</p>
         <div class="project-tags">
-          <span class="project-tag">HTML / CSS</span>
-          <span class="project-tag">JavaScript</span>
+          <span class="project-tag">Next.js</span>
+          <span class="project-tag">Tailwind CSS</span>
           <span class="project-tag">Responsive</span>
           <span class="project-tag">Freelance</span>
         </div>
