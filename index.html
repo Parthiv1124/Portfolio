@@ -473,6 +473,145 @@
     }
 
     /* ============================================
+       HERO BANNER (Photo Section)
+    ============================================ */
+    .hero-banner {
+      position: relative;
+      width: 100%;
+      padding: 0 clamp(1.5rem, 4vw, 4rem);
+      margin-top: -2rem;
+      margin-bottom: 0;
+      overflow: hidden;
+    }
+
+    .hero-banner-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      position: relative;
+      border-radius: 20px;
+      overflow: hidden;
+      aspect-ratio: 16 / 7;
+      background: var(--bg-elevated);
+    }
+
+    .hero-banner-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+      display: block;
+      will-change: transform;
+      transition: transform 0.1s linear;
+      background: var(--bg-elevated);
+    }
+
+    .hero-banner-overlay {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, var(--bg) 0%, transparent 25%),
+        linear-gradient(0deg, var(--bg) 0%, transparent 30%),
+        linear-gradient(90deg, rgba(10,10,10,0.4) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .hero-banner-grain {
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      opacity: 0.06;
+      pointer-events: none;
+      z-index: 3;
+      mix-blend-mode: overlay;
+    }
+
+    .hero-banner-text {
+      position: absolute;
+      bottom: clamp(1.5rem, 4vw, 3rem);
+      left: clamp(1.5rem, 4vw, 3rem);
+      z-index: 4;
+    }
+
+    .hero-banner-name {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: clamp(1.5rem, 4vw, 3.5rem);
+      letter-spacing: -0.03em;
+      line-height: 1;
+      color: var(--text);
+    }
+
+    .hero-banner-role {
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      margin-top: 0.5rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .hero-banner-badge {
+      position: absolute;
+      top: clamp(1.5rem, 3vw, 2.5rem);
+      right: clamp(1.5rem, 3vw, 2.5rem);
+      z-index: 4;
+      width: clamp(70px, 10vw, 110px);
+      height: clamp(70px, 10vw, 110px);
+      animation: spinBadge 12s linear infinite;
+    }
+
+    .hero-banner-badge svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    @keyframes spinBadge {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .hero-banner-float {
+      position: absolute;
+      z-index: 3;
+      will-change: transform;
+    }
+
+    .hero-banner-float-1 {
+      top: 10%;
+      right: 8%;
+      width: clamp(60px, 10vw, 120px);
+      height: clamp(60px, 10vw, 120px);
+      background: var(--accent);
+      border-radius: 50%;
+      opacity: 0.12;
+      filter: blur(30px);
+    }
+
+    .hero-banner-float-2 {
+      bottom: 20%;
+      left: 5%;
+      width: clamp(80px, 12vw, 160px);
+      height: clamp(80px, 12vw, 160px);
+      background: var(--accent);
+      border-radius: 50%;
+      opacity: 0.08;
+      filter: blur(40px);
+    }
+
+    @media (max-width: 900px) {
+      .hero-banner-inner {
+        aspect-ratio: 4 / 3;
+        border-radius: 14px;
+      }
+
+      .hero-banner-badge {
+        width: 60px;
+        height: 60px;
+      }
+    }
+
+    /* ============================================
        MARQUEE
     ============================================ */
     .marquee {
@@ -1482,6 +1621,50 @@
   </section>
 
   <!-- ============================
+       HERO BANNER (Photo)
+  ============================ -->
+  <div class="hero-banner" id="heroBanner">
+    <div class="hero-banner-inner" id="heroBannerInner">
+      <!--
+        REPLACE the src below with your real photo:
+        e.g. src="photo.jpg" — place photo.jpg next to index.html
+      -->
+      <img
+        class="hero-banner-img"
+        id="heroBannerImg"
+        src="parthiv.png"
+        alt="Parthiv Radadiya"
+      >
+
+      <!-- Floating ambient orbs that track mouse -->
+      <div class="hero-banner-float hero-banner-float-1" data-float-speed="0.03"></div>
+      <div class="hero-banner-float hero-banner-float-2" data-float-speed="0.05"></div>
+
+      <!-- Gradient overlays -->
+      <div class="hero-banner-overlay"></div>
+      <div class="hero-banner-grain"></div>
+
+      <!-- Rotating badge -->
+      <div class="hero-banner-badge" id="heroBadge">
+        <svg viewBox="0 0 200 200">
+          <defs>
+            <path id="circlePath" d="M 100,100 m -75,0 a 75,75 0 1,1 150,0 a 75,75 0 1,1 -150,0"/>
+          </defs>
+          <text fill="#c2f04c" font-family="DM Mono, monospace" font-size="13" letter-spacing="4">
+            <textPath href="#circlePath">AI ENGINEER · BUILDING SYSTEMS · SINCE 2022 · </textPath>
+          </text>
+        </svg>
+      </div>
+
+      <!-- Name overlay on image -->
+      <div class="hero-banner-text">
+        <div class="hero-banner-name">Parthiv Radadiya</div>
+        <div class="hero-banner-role">AI Engineer · LLM · RAG · Agents · AWS</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================
        MARQUEE
   ============================ -->
   <div class="marquee">
@@ -2281,6 +2464,77 @@
       }
 
       // =============================================
+      // HERO BANNER — parallax image + mouse float
+      // =============================================
+      function initHeroBanner() {
+        var bannerInner = document.getElementById('heroBannerInner');
+        var bannerImg = document.getElementById('heroBannerImg');
+        if (!bannerInner || !bannerImg) return;
+
+        // Scroll parallax: subtle vertical movement only (no zoom)
+        gsap.to(bannerImg, {
+          yPercent: 5,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: '.hero-banner',
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: true,
+          }
+        });
+
+        // Banner reveal on load
+        gsap.from(bannerInner, {
+          scale: 0.92,
+          opacity: 0,
+          borderRadius: '40px',
+          duration: 1.2,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: '.hero-banner',
+            start: 'top 90%',
+            toggleActions: 'play none none none',
+          }
+        });
+
+        // Mouse-tracking float for ambient orbs
+        var floaters = document.querySelectorAll('[data-float-speed]');
+        var bannerMouseX = 0, bannerMouseY = 0;
+
+        bannerInner.addEventListener('mousemove', function (e) {
+          var rect = bannerInner.getBoundingClientRect();
+          bannerMouseX = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
+          bannerMouseY = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
+
+          // Subtle image shift on mouse
+          gsap.to(bannerImg, {
+            x: bannerMouseX * -15,
+            y: bannerMouseY * -10,
+            duration: 1,
+            ease: 'power2.out',
+          });
+
+          // Float orbs in opposite direction
+          floaters.forEach(function (f) {
+            var speed = parseFloat(f.getAttribute('data-float-speed')) || 0.03;
+            gsap.to(f, {
+              x: bannerMouseX * 60 * speed * 30,
+              y: bannerMouseY * 40 * speed * 30,
+              duration: 1.5,
+              ease: 'power2.out',
+            });
+          });
+        });
+
+        bannerInner.addEventListener('mouseleave', function () {
+          gsap.to(bannerImg, { x: 0, y: 0, duration: 1, ease: 'power2.out' });
+          floaters.forEach(function (f) {
+            gsap.to(f, { x: 0, y: 0, duration: 1.5, ease: 'power2.out' });
+          });
+        });
+      }
+
+      // =============================================
       // MARQUEE SPEED ADJUSTMENT ON SCROLL
       // =============================================
       function initMarqueeScroll() {
@@ -2322,6 +2576,7 @@
           initBackToTop();
           initNavScroll();
           initHeroParallax();
+          initHeroBanner();
           initMarqueeScroll();
           ScrollTrigger.refresh();
         }, 3000);
